@@ -1,15 +1,19 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const ejs = require('ejs')
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require("./utils/wrapAsync.js")
 const ExpressError = require("./utils/ExpressError.js");
-const {listingSchema} = require("./Schema.js");
+const session = require('express-session');
+const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require("./models/user.js");
 
-const Listing = require('./models/listing');
+const listingsRouter = require("./routes/listing.js");
+const reviewsRouter = require("./routes/review.js")
+const userRouter = require("./routes/user.js")
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
@@ -24,6 +28,19 @@ app.use(methodOverride("_method"));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const sessionOptions = {
+    secret: "mysuperscretecode",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 *60* 1000,
+        maxAge: 7 * 24 * 60 *60* 1000,
+        httpOnly: true,
+    }
+};
+
+
 main().then(() => {
     console.log("Connected to MongoDB");
 }).catch((err) => {
@@ -34,67 +51,32 @@ app.get('/', (req, res) => {
     res.send('Hello ');
 });
 
-const validateListing = (req, res, next)=>{
-     let {error} = listingSchema.validate(req.body);
-   if(error){
-    let errMsg = error.details.map((el)=>  el.message).join(",");
-    throw new ExpressError(400, errMsg);
-   } else {
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+app.use((req, res, next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
     next();
-   }
-}
+})
 
 
 
-//index route to display all listings
-app.get('/listings', async (req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index", {allListings});
-});
 
-// New listing form route
-app.get('/listings/new', (req, res) => {
-    res.render("listings/new");
-});
+app.use("/listings", listingsRouter);
+app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", userRouter);
 
-//show route to display a specific listing by ID
-app.get('/listings/:id',wrapAsync( async (req, res) => {
-    const {id} = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/show", {listing});
-}));
-
-//Create listing route
-app.post('/listings',validateListing, wrapAsync(async (req, res, next) => {
-  
-    const newListing = new Listing(req.body.listing);
-    await newListing.save();
-    res.redirect("/listings");
-}));
-
-// Edit listing form route
-app.get('/listings/:id/edit',wrapAsync ( async (req, res) => {
-    const {id} = req.params;
-    const listing = await Listing.findById(id);
-    res.render("listings/edit", {listing});
-}));
-
-// Update listing route
-app.put('/listings/:id',validateListing, wrapAsync( async (req, res) => {
-        if(!res.body.Listing){
-        throw new ExpressError(400, "Send the valid data for the listing")
-    }
-    const {id} = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/listings/${id}`);
-}));
-
-// Delete listing route
-app.delete('/listings/:id',wrapAsync( async (req, res) => {
-    const {id} = req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect('/listings');
-}));
 
 // 404 handler (FIXED)
 app.use((req, res, next) => {
