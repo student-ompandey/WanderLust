@@ -9,17 +9,11 @@ const listingSchema = new Schema({
         // required: true,  
     },
     description: {
-        type: String,
+        type: String, 
     },
     image: {
-        filename: {
-            type: String,
-            default: "listingimage",
-        },
-        url: {
-            type: String,
-            default: "https://unsplash.com/photos/two-chairs-sitting-in-front-of-a-swimming-pool-k_My4rXk4Lc",
-        },
+        url: String,
+        filename: String
     },
     price: {
         type: Number,
