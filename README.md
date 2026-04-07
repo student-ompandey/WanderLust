@@ -1,98 +1,65 @@
-# WanderLust
+# WanderLust 🌍
 
-WanderLust is a robust web application designed for modern travelers to discover, share, and review unique travel destinations. Whether you're looking to document your journeys or find inspiration for your next trip, WanderLust provides an interactive platform to connect adventurers from around the world.
+WanderLust is a server-side rendered Node.js web application built with Express and MongoDB. Inspired by platforms like Airbnb, it allows users to explore, create, and review travel accommodations and listings.
 
-## 🌍 Features
+## Features
+- **User Authentication**: Secure signup and login functionality using Passport.js.
+- **Listings Management**: Full CRUD (Create, Read, Update, Delete) operations for travel listings.
+- **Review System**: Users can leave ratings and text reviews on accommodations.
+- **Form Validation**: Strict server-side input validation integrated via Joi.
+- **Session Management**: Persistent user sessions and interactive flash messages for a better UI experience.
 
-- **Discover Destinations:** Browse a growing collection of travel spots with photos, descriptions, and user reviews.
-- **User Authentication:** Secure sign-up and login system for an individualized experience.
-- **Post & Review:** Share new destinations, upload images, and leave helpful reviews for the community.
-- **Interactive Maps:** View destination locations on integrated maps.
-- **Favorite & Save:** Bookmark favorite places for easy access.
-- **Responsive Design:** Seamless experience across all screen sizes.
+## Tech Stack
+- **Backend Framework**: [Node.js](https://nodejs.org/en) & [Express.js](https://expressjs.com/)
+- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
+- **Templating Engine**: [EJS](https://ejs.co/) (with `ejs-mate` for layouts)
+- **Authentication**: [Passport.js](https://www.passportjs.org/) (Local Strategy)
+- **Data Validation**: [Joi](https://joi.dev/)
 
-## 🚀 Getting Started
+## Prerequisites
+Ensure the following are installed on your local machine before running the app:
+- [Node.js](https://nodejs.org/en/download/) (v14 or higher)
+- [MongoDB Community Server](https://www.mongodb.com/try/download/community)
 
-### Prerequisites
+## Getting Started
 
-- [Node.js](https://nodejs.org/) (v14.x or above)
-- [MongoDB](https://www.mongodb.com/) (local installation or Atlas cluster)
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/student-ompandey/WanderLust.git
-   cd WanderLust
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-
-   Create a `.env` file in the root directory and add:
-   ```
-   MONGODB_URI=your_mongodb_connection_string
-   SESSION_SECRET=your_session_secret
-   PORT=3000
-   ```
-
-4. **Start the app**
-   ```bash
-   npm start
-   ```
-
-5. Open your browser and visit [http://localhost:3000](http://localhost:3000)
-
-## 🛠️ Tech Stack
-
-- **Backend:** Node.js, Express.js
-- **Frontend:** EJS, HTML5, CSS3, JavaScript (Vanilla or React)
-- **Database:** MongoDB & Mongoose
-- **Authentication:** Passport.js (Local Strategy)
-- **Maps Integration:** Mapbox or Google Maps API
-
-## 📂 Project Structure
-
+### 1. Clone the repository
+```bash
+git clone <your-repository-url>
+cd WanderLust
 ```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Start MongoDB
+Make sure your local MongoDB server is running on the default port (`27017`). The app will attempt to connect to:
+`mongodb://127.0.0.1:27017/wanderlust`
+
+### 4. Run the application
+```bash
+node app.js
+```
+*Alternatively, if you use nodemon:*
+```bash
+nodemon app.js
+```
+
+### 5. Access in the browser
+Open your web browser and navigate to:
+[http://localhost:8000](http://localhost:8000)
+
+## Project Structure
+```text
 WanderLust/
-├── models/
-├── routes/
-├── public/
-│   ├── css/
-│   └── js/
-├── views/
-├── .env (not committed)
-├── app.js / server.js
-└── README.md
+├── models/         # Mongoose schemas (Listing, Review, User)
+├── public/         # Static assets (CSS, JS, Images)
+├── routes/         # Express Router modules (listings, reviews, users)
+├── utils/          # Utility classes (Custom Express Error handling)
+├── views/          # EJS templates and layouts
+├── app.js          # Application entry point
+├── Schema.js       # Joi schemas for server-side validation
+└── package.json    # Project dependencies and scripts
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please fork the repository and create a pull request for review.
-
-1. Fork the repo and clone your fork.
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and commit: `git commit -m 'Add some feature'`
-4. Push to your fork: `git push origin feature/your-feature-name`
-5. Open a pull request.
-
-## 📃 License
-
-[MIT](LICENSE)
-
-## 📢 Acknowledgements
-
-- [Node.js](https://nodejs.org/)
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Passport.js](http://www.passportjs.org/)
-- [Mapbox](https://www.mapbox.com/) or [Google Maps](https://developers.google.com/maps)
-- Inspiration: YelpCamp (from Colt Steele’s Web Bootcamp)
-
----
-
-Happy traveling! 🌏✨
