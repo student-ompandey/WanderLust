@@ -1,31 +1,117 @@
 <% layout("/layouts/boilerplate") -%>
 
-<div class="row">
-    <h1 class="col-6 offset-3">Login</h1>
-  <div class="col-6 offset-3">
+<style>
+/* AntiGravity Theme */
+.antigravity-auth {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #000000;
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: #FFFFFF;
+  font-family: "Inter", sans-serif;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.antigravity-card {
+  background: rgba(17, 17, 17, 0.9);
+  border: 1px solid #333;
+  padding: 3rem;
+  width: 100%;
+  max-width: 450px;
+}
+
+.antigravity-title {
+  font-family: monospace;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.antigravity-input {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid #555555 !important;
+  border-radius: 0 !important;
+  color: #FFFFFF !important;
+  font-family: monospace !important;
+  padding-left: 0 !important;
+  box-shadow: none !important;
+}
+
+.antigravity-input:focus {
+  border-bottom: 1px solid #FF0000 !important;
+  outline: none;
+}
+
+.antigravity-label {
+  font-family: monospace;
+  color: #888888;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+
+.antigravity-btn {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border-radius: 0 !important;
+  font-family: monospace !important;
+  font-weight: bold !important;
+  text-transform: uppercase !important;
+  border: 1px solid #FFFFFF !important;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.8rem !important;
+  transition: all 0.2s ease;
+}
+
+.antigravity-btn:hover {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+.antigravity-close {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  color: #fff;
+  text-decoration: none;
+  font-family: monospace;
+  font-size: 1.2rem;
+}
+
+.antigravity-close:hover {
+  color: #FF0000;
+}
+</style>
+
+<div class="antigravity-auth">
+  <a href="/listings" class="antigravity-close">[X] ESCAPE</a>
+  <div class="antigravity-card">
+    <% if(typeof success !== 'undefined' && success && success.length) { %>
+      <div class="alert alert-success" style="border-radius: 0; font-family: monospace; background: #050; border: 1px solid #0f0; color: #fff; margin-bottom: 1rem;"><%= success %></div>
+    <% } %>
+    <% if(typeof error !== 'undefined' && error && error.length) { %>
+      <div class="alert alert-danger" style="border-radius: 0; font-family: monospace; background: #500; border: 1px solid #f00; color: #fff; margin-bottom: 1rem;"><%= error %></div>
+    <% } %>
+    <div class="antigravity-title">JOIN THE VOID</div>
     <form action="/login" method="POST" class="needs-validation" novalidate>
-        <div class="mb-3">
-      <label for="username" class="form-label">Username:</label>
-      <input
-        name="username"
-        id="username"
-        name="listing[title]"
-        required
-        class="form-control"
-      />
-      </div>
-       <div class="mb-3">
-      <label for="password" class="form-label">Password:</label>
-      <input
-        name="password"
-        id="password"
-        name="password"
-        type="password"
-        required
-        class="form-control"
-      />
-      </div>
-      <button class="btn btn-success">Login</button>
+        <div class="mb-4">
+            <label for="username" class="form-label antigravity-label">Username</label>
+            <input name="username" id="username" required class="form-control antigravity-input" placeholder="enter_username" />
+        </div>
+        <div class="mb-4">
+            <label for="password" class="form-label antigravity-label">Password</label>
+            <input name="password" id="password" type="password" required class="form-control antigravity-input" placeholder="••••••••" />
+        </div>
+        <button class="btn antigravity-btn">INITIALIZE_LOGIN</button>
     </form>
   </div>
 </div>

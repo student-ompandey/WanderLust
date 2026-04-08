@@ -21,8 +21,8 @@
     const reviewsRouter = require("./routes/review.js")
     const userRouter = require("./routes/user.js")
 
-    const dbUrl = process.env.ATLASDB_URL;
-    const SECRET = "MY-SUPER-SECURE-SECRET-KEY";
+    const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+    const SECRET = process.env.SECRET || "MY-SUPER-SECURE-SECRET-KEY";
 
     async function main(){
         await mongoose.connect(dbUrl);

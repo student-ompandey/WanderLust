@@ -1,73 +1,161 @@
 <style>
-  .search-btn {
-    background-color: #fe424d;
-    color: #fff;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
-  }
-  .search-btn:hover {
-    background-color: #fe424d;
-    color: #fff;
-  }
-   .search-btn i {
-    display: inline;
-    margin-right: 0.5rem;
+  /* AntiGravity Enhanced Navbar */
+  .ag-navbar {
+    background-color: rgba(5, 5, 5, 0.95);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid #333;
+    padding: 1rem 2rem;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
 
-  .search-inp{
-    border-radius: 25px;
-    padding:0.5rem 3rem 0.5rem 3rem;
-    font-size:1rem;
+  .ag-brand {
+    color: var(--ag-text-bright);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s ease;
+  }
+
+  .ag-brand:hover {
+    color: var(--ag-accent);
+  }
+
+  .ag-brand-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 1.2rem;
+    background-color: var(--ag-accent);
+    margin-left: 5px;
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .ag-nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .ag-link {
+    color: #888888;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .ag-link::before {
+    content: ">";
+    color: #333;
+    margin-right: 8px;
+    transition: color 0.2s ease;
+  }
+
+  .ag-link:hover {
+    color: var(--ag-text-bright);
+  }
+
+  .ag-link:hover::before {
+    color: var(--ag-accent);
+  }
+
+  .ag-search-container {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--ag-border);
+    padding: 0.2rem 0;
+    margin-right: 2rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .ag-search-container:focus-within {
+    border-color: var(--ag-accent);
+  }
+
+  .ag-search-input {
+    background: transparent;
+    border: none;
+    color: var(--ag-text-bright);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    padding: 0.2rem 0.5rem;
+    width: 200px;
+  }
+
+  .ag-search-input::placeholder {
+    color: #555555;
+  }
+
+  .ag-search-icon {
+    color: #888888;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .ag-search-container:focus-within .ag-search-icon {
+    color: var(--ag-accent);
+  }
+
+  /* Mobile menu button */
+  .ag-mobile-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--ag-text-bright);
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .ag-nav-links { display: none; }
+    .ag-search-container { display: none; }
+    .ag-mobile-toggle { display: block; }
   }
 </style>
 
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-solid fa-compass"></i>
-    </a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2 search-inp"
-            type="search"
-            placeholder="Search destinations"
-          />
-          <button class="btn search-btn" type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>Search
-          </button>
-        </form>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        <% if(!currUser) { %>
-        <a class="nav-link" href="/signup"><b>Sign up</b></a>
-        <a class="nav-link" href="/login"><b>Log in</b></a>
-        <% } %> <% if(currUser) { %>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
-        <% } %>
-      </div>
-    </div>
+<nav class="ag-navbar">
+  <a href="/listings" class="ag-brand">
+    [ WANDERLUST ] <span class="ag-brand-cursor"></span>
+  </a>
+
+  <div class="ag-nav-links">
+    <form action="/listings" method="GET" class="ag-search-container">
+      <input type="text" name="search" class="ag-search-input" placeholder="SEARCH_DESTINATIONS..." />
+      <i class="fa-solid fa-magnifying-glass ag-search-icon"></i>
+    </form>
+
+    <a href="/listings" class="ag-link">EXPLORE</a>
+    <a href="/listings/new" class="ag-link">INIT_HOSTING</a>
+
+    <% if(!currUser) { %>
+      <a href="/login" class="ag-link">LOGIN</a>
+      <a href="/signup" class="ag-link" style="color: var(--ag-text-bright); border: 1px solid var(--ag-border); padding: 0.4rem 1rem; border-radius: 0;">SIGN_UP</a>
+    <% } else { %>
+      <a href="/logout" class="ag-link" style="color: var(--ag-accent);">LOGOUT</a>
+    <% } %>
   </div>
+
+  <button class="ag-mobile-toggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
 </nav>
 
-<!-- Font Awesome (correct version) -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  integrity="sha512-SzlrxWriC3LLJSk6DX7C0VtvhQ5pM9s1G1rVbztcYgV1N7cvM4Iq6C2d4smF4p4p2Jdv+ZC2eR8wC8xwT+JQ0Q=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SzlrxWriC3LLJSk6DX7C0VtvhQ5pM9s1G1rVbztcYgV1N7cvM4Iq6C2d4smF4p4p2Jdv+ZC2eR8wC8xwT+JQ0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />

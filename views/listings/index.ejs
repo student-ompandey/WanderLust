@@ -1,135 +1,203 @@
 <% layout("/layouts/boilerplate") -%>
 
+<style>
+  .ag-header-block {
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 2rem;
+  }
+  
+  .ag-header-title {
+    font-size: 1.5rem;
+    color: var(--ag-text-bright);
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
 
-  <style>
-    #filters{
-      display: flex;
-      flex-wrap:wrap;
-      align-items: center;
-    }
+  .ag-filters-container {
+    display: flex;
+    gap: 2.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    scrollbar-width: none;
+  }
+  .ag-filters-container::-webkit-scrollbar {
+    display: none;
+  }
 
-    .filter{
-      text-align: center;
-      margin-right:2rem;
-      margin-top:2rem;
-      opacity:0.7;
-    }
+  .ag-filter-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #888888;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: max-content;
+  }
 
-    .filter:hover{
-      opacity:1;
-      cursor:pointer;
-    }
+  .ag-filter-item:hover {
+    color: var(--ag-text-bright);
+    transform: translateY(-2px);
+  }
 
-    .filter p{
-      font-size: 0.8rem;
-    }
+  .ag-filter-item i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
 
-    .tax-info{
-      display:none;
-    }
-    .tax-toggle{
-      border:1px solid black;
-      border-radius: 1rem;
-      height:3rem;
-      padding:1rem;
-      margin-left: 3rem;
-      display:flex;
-      align-items: center;
-    }
-  </style>
-    <div id="filters">
-      <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Treanding</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></i></div>
-        <p>Iconic cities</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-mountain"></i></div>
-        <p>Mountais</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-chess-rook"></i></div>
-        <p>Castles</p>
-      </div>
-        <div class="filter">
-        <div><i class="fa-sharp-duotone fa-solid fa-person-swimming"></i></div>
-        <p>Amazing pools</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-house"></i></div>
-        <p>Farms</p>
-      </div>
-      <div class="filter">
-        <div><i class="fa-solid fa-snowman"></i></div>
-        <p>Camping</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-snowman"></i></div>
-        <p>Camping</p>
-      </div>
-       <div class="filter">
-        <div><i class="fa-solid fa-snowman"></i></div>
-        <p>Camping</p>
-      </div>
-      <div class="tax-toggle">
-        <div class="form-check-reverse form-switch">
-  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-  <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+  .ag-filter-item span {
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .ag-tax-toggle {
+    border: 1px solid #555;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--ag-text-silver);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .ag-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+
+  .ag-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .ag-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: transparent;
+    border: 1px solid #555;
+    transition: .4s;
+  }
+
+  .ag-slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #555;
+    transition: .4s;
+  }
+
+  input:checked + .ag-slider {
+    border-color: var(--ag-accent);
+  }
+
+  input:checked + .ag-slider:before {
+    transform: translateX(20px);
+    background-color: var(--ag-accent);
+  }
+</style>
+
+<div class="ag-header-block">
+  <h2 class="ag-header-title">> DIRECTORY_LISTINGS</h2>
+  <div class="ag-tax-toggle">
+    <span>[ DISPLAY_TAX ]</span>
+    <label class="ag-switch">
+      <input type="checkbox" id="switchCheckDefault">
+      <span class="ag-slider"></span>
+    </label>
+  </div>
 </div>
-      </div>
-    </div>
 
-    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
+<div class="ag-filters-container">
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-fire"></i>
+    <span>Trending</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-bed"></i>
+    <span>Rooms</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-mountain-city"></i>
+    <span>Iconic Cities</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-mountain"></i>
+    <span>Mountains</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-chess-rook"></i>
+    <span>Castles</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-sharp-duotone fa-solid fa-person-swimming"></i>
+    <span>Amazing Pools</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-campground"></i>
+    <span>Camping</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-house"></i>
+    <span>Farms</span>
+  </div>
+  <div class="ag-filter-item">
+    <i class="fa-solid fa-snowflake"></i>
+    <span>Arctic</span>
+  </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1 mt-3">
   <% allListings.forEach(function(listing) { %>
     <a href="/listings/<%= listing._id %>" class="listing-link">
-
-  <div class="card listing-card">
-    <img
-      src="<%= typeof listing.image === 'object' ? listing.image.url : listing.image %>"
-      class="card-img-top"
-      alt="listing_image"
-      style="height: 20rem"
-    />
-    <div class="card-img-overlay"></div>
-
-    <div class="card-body">
-      <p class="card-text">
-       <b> <%= listing.title %><br /></b>
-        <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
-        <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
-
-      </p>
-    </div>
-  </div>
-  </a>
-
+      <div class="card listing-card">
+        <img
+          src="<%= typeof listing.image === 'object' ? listing.image.url : listing.image %>"
+          class="card-img-top"
+          alt="listing_image"
+          style="height: 20rem"
+        />
+        <div class="card-img-overlay"></div>
+        <div class="card-body">
+          <p class="card-text pb-0 mb-0" style="font-family: 'Space Mono', monospace;">
+           <strong style="color: var(--ag-text-bright); font-size: 1.1rem; text-transform: uppercase;">[ <%= listing.title %> ]</strong><br />
+           <span style="color: var(--ag-accent); font-size: 0.9rem;">> RATE: </span> 
+           <span style="color: var(--ag-text-silver);">&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / NIGHT</span>
+           <span class="tax-info" style="display:none; color: #888; font-size: 0.8rem;">&nbsp; [+18% GST]</span>
+          </p>
+        </div>
+      </div>
+    </a>
   <% }); %>
-  </div>
+</div>
 
-  <script>
-    let textSwitch = document.getElementById("switchCheckDefault");
-    textSwitch.addEventListener("click", ()=>{
-      let taxInfo = document.getElementsByClassName("tax-info")
-      for (info of taxInfo){
-        if(info.style.display != "inline"){
-           info.style.display = "inline";
-        } else {
-          info.style.display = "none";
-        }
-       
+<script>
+  let textSwitch = document.getElementById("switchCheckDefault");
+  textSwitch.addEventListener("click", ()=>{
+    let taxInfo = document.getElementsByClassName("tax-info")
+    for (info of taxInfo){
+      if(info.style.display != "inline"){
+         info.style.display = "inline";
+      } else {
+        info.style.display = "none";
       }
-    })
-
-  </script>
-
+    }
+  })
+</script>
